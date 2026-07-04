@@ -1,0 +1,28 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+node_modules/
+dist/
+build/
+.DS_Store
+*.log
+
+# Agent / workflow files (local only)
+.agents/
+AGENTS.md
+MEMORY.md
+CLAUDE.md
+
+# Build artifacts
+*.tsbuildinfo
+
+# Root package files (not used by this project)
+/package.json
+/package-lock.json
