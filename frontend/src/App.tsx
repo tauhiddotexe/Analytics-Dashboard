@@ -38,7 +38,9 @@ function App() {
   const recordsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetchFilters().then(setFilterOptions).catch(() => setError('Unable to load filter options. Check the API server and database connection.'));
+    fetchFilters()
+      .then(setFilterOptions)
+      .catch(() => setError('Unable to load filter options. Check the API server and database connection.'));
   }, []);
 
   useEffect(() => {
@@ -78,7 +80,7 @@ function App() {
   function updateFilter(key: keyof DashboardFilters, value: string) {
     startTransition(() => {
       setPage(1);
-      setFilters((current) => ({ ...current, [key]: value }));
+      setFilters((current) => ({ ...current, [key]: value || undefined }));
     });
   }
 
@@ -104,11 +106,14 @@ function App() {
             filters={filters}
             filterOptions={filterOptions}
             onFilterChange={updateFilter}
-            onReset={() => { setPage(1); setFilters(emptyFilters); }}
+            onReset={() => { startTransition(() => { setPage(1); setFilters(emptyFilters); }); }}
           />
 
           {error && (
-            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 font-semibold text-red-700" role="alert">
+            <div className="flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700" role="alert">
+              <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               {error}
             </div>
           )}
@@ -118,10 +123,10 @@ function App() {
           ) : (
             <>
               <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <KpiCard label="Total records" value={formatNumber(summary?.total_records)} accent="bg-indigo-500" />
-                <KpiCard label="Average intensity" value={formatNumber(summary?.average_intensity)} accent="bg-cyan-500" />
-                <KpiCard label="Average likelihood" value={formatNumber(summary?.average_likelihood)} accent="bg-emerald-500" />
-                <KpiCard label="Average relevance" value={formatNumber(summary?.average_relevance)} accent="bg-amber-500" />
+                <KpiCard label="Total records" value={formatNumber(summary?.total_records)} accent="bg-primary" />
+                <KpiCard label="Average intensity" value={formatNumber(summary?.average_intensity)} accent="bg-chart-2" />
+                <KpiCard label="Average likelihood" value={formatNumber(summary?.average_likelihood)} accent="bg-chart-3" />
+                <KpiCard label="Average relevance" value={formatNumber(summary?.average_relevance)} accent="bg-chart-4" />
               </section>
 
               <section className="grid gap-6 xl:grid-cols-2">
@@ -150,7 +155,7 @@ function App() {
                   records={records}
                   page={page}
                   totalPages={totalPages}
-                  onPageChange={setPage}
+                  onPageChange={(p) => startTransition(() => setPage(p))}
                 />
               </div>
             </>

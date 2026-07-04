@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { DashboardFilters, FilterOptions } from '../types';
 
 interface FilterPanelProps {
@@ -27,43 +27,82 @@ function FilterSelect({ label, value, options, onChange }: { label: string; valu
   );
 }
 
+const FILTER_CONFIG: { key: keyof DashboardFilters; label: string; optionsKey?: keyof FilterOptions }[] = [
+  { key: 'end_year', label: 'End year' },
+  { key: 'topic', label: 'Topic' },
+  { key: 'sector', label: 'Sector' },
+  { key: 'region', label: 'Region' },
+  { key: 'country', label: 'Country' },
+  { key: 'city', label: 'City' },
+  { key: 'source', label: 'Source' },
+  { key: 'pestle', label: 'Pestle', optionsKey: 'pestle' },
+  { key: 'swot', label: 'SWOT', optionsKey: 'swot' },
+];
+
 export function FilterPanel({ filters, filterOptions, onFilterChange, onReset }: FilterPanelProps) {
   const [collapsed, setCollapsed] = useState(false);
-  const years = filterOptions?.end_years.map(String) ?? [];
+  const activeCount = useMemo(() => Object.values(filters).filter((v) => v !== undefined && v !== '').length, [filters]);
 
   return (
     <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       <button
-        className="mb-4 flex w-full items-center justify-between text-left"
+        className="flex w-full items-center justify-between text-left"
         onClick={() => setCollapsed((c) => !c)}
         aria-expanded={!collapsed}
         aria-controls="filter-grid"
       >
-        <h2 className="text-xl font-black text-slate-900">Server-side filters</h2>
-        <span className="text-sm text-slate-400 transition-transform data-[open=true]:rotate-180">
-          {collapsed ? '\u25BC' : '\u25B2'}
-        </span>
+        <div className="flex items-center gap-3">
+          <h2 className="text-xl font-black text-slate-900">Server-side filters</h2>
+          {activeCount > 0 && (
+            <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-2 text-xs font-bold text-white">
+              {activeCount}
+            </span>
+          )}
+        </div>
+        <svg
+          className={`h-4 w-4 text-slate-400 transition-transform ${collapsed ? '' : 'rotate-180'}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+          aria-hidden
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
       </button>
+
       {!collapsed && (
-        <>
+        <div className="mt-4">
           <div id="filter-grid" className="mb-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            <FilterSelect label="End year" value={filters.end_year ?? ''} options={years} onChange={(v) => onFilterChange('end_year', v)} />
-            <FilterSelect label="Topic" value={filters.topic ?? ''} options={filterOptions?.topics ?? []} onChange={(v) => onFilterChange('topic', v)} />
-            <FilterSelect label="Sector" value={filters.sector ?? ''} options={filterOptions?.sectors ?? []} onChange={(v) => onFilterChange('sector', v)} />
-            <FilterSelect label="Region" value={filters.region ?? ''} options={filterOptions?.regions ?? []} onChange={(v) => onFilterChange('region', v)} />
-            <FilterSelect label="Country" value={filters.country ?? ''} options={filterOptions?.countries ?? []} onChange={(v) => onFilterChange('country', v)} />
-            <FilterSelect label="City" value={filters.city ?? ''} options={filterOptions?.cities ?? []} onChange={(v) => onFilterChange('city', v)} />
-            <FilterSelect label="Source" value={filters.source ?? ''} options={filterOptions?.sources ?? []} onChange={(v) => onFilterChange('source', v)} />
-            <FilterSelect label="PESTLE" value={filters.pestle ?? ''} options={filterOptions?.pestle ?? []} onChange={(v) => onFilterChange('pestle', v)} />
-            <FilterSelect label="SWOT" value={filters.swot ?? ''} options={filterOptions?.swot ?? []} onChange={(v) => onFilterChange('swot', v)} />
+            {FILTER_CONFIG.map(({ key, label, optionsKey }) => {
+              let options: string[];
+              if (key === 'end_year') {
+                options = (filterOptions?.end_years ?? []).map(String);
+              } else if (optionsKey) {
+                options = (filterOptions?.[optionsKey] ?? []) as string[];
+              } else {
+                const optKey = `${key}s` as keyof FilterOptions;
+                options = (filterOptions?.[optKey] ?? []) as string[];
+              }
+              return (
+                <FilterSelect
+                  key={key}
+                  label={label}
+                  value={filters[key] ?? ''}
+                  options={options}
+                  onChange={(v) => onFilterChange(key, v)}
+                />
+              );
+            })}
           </div>
           <button
-            className="cursor-pointer rounded-full bg-slate-900 px-5 py-2 text-sm font-bold text-white transition hover:bg-primary"
+            className="cursor-pointer rounded-full bg-slate-900 px-5 py-2 text-sm font-bold text-white transition hover:bg-primary disabled:opacity-40"
             onClick={onReset}
+            disabled={activeCount === 0}
           >
             Reset filters
           </button>
-        </>
+        </div>
       )}
     </section>
   );
