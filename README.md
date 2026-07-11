@@ -2,6 +2,8 @@
 
 > Full-stack Business Intelligence dashboard — transform raw JSON data into interactive visual insights.
 
+**🔗 Live Demo:** [https://analytics-dashboard-eta-nine.vercel.app](https://analytics-dashboard-eta-nine.vercel.app)
+
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-20232A?style=flat&logo=typescript&logoColor=3178C6)
 ![FastAPI](https://img.shields.io/badge/FastAPI-20232A?style=flat&logo=fastapi&logoColor=009688)
@@ -137,7 +139,7 @@ python scripts/import_json.py
 uvicorn app.main:app --reload
 ```
 
-API docs available at `http://localhost:8000/docs`.
+API docs available at `http://localhost:8000/docs` (or the deployed `/docs` endpoint).
 
 ### 3. Frontend
 
@@ -154,6 +156,27 @@ npm run dev
 ```
 
 Open `http://localhost:5173`.
+
+### 4. Production Deployments
+
+| Service | URL |
+|---------|-----|
+| **Frontend** (Vercel) | [https://analytics-dashboard-eta-nine.vercel.app](https://analytics-dashboard-eta-nine.vercel.app) |
+| **Backend** (Render) | Set via Render environment `VITE_API_URL` in Vercel project settings |
+
+The backend requires these environment variables on Render:
+
+| Variable | Example |
+|----------|---------|
+| `DATABASE_URL` | `postgresql+psycopg://...` |
+| `ALLOWED_ORIGINS` | `http://localhost:5173,https://analytics-dashboard-eta-nine.vercel.app` |
+| `APP_ENV` | `production` |
+
+The frontend requires this environment variable on Vercel:
+
+| Variable | Value |
+|----------|-------|
+| `VITE_API_URL` | `https://your-render-app.onrender.com/api/v1` |
 
 ---
 
