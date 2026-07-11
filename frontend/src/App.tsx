@@ -13,6 +13,7 @@ import { RelevanceRadarChart } from './charts/RelevanceRadarChart';
 import { YearlyComposedChart } from './charts/YearlyComposedChart';
 import { WorldMap } from './charts/WorldMap';
 import { TopicsBarChart } from './charts/TopicsBarChart';
+import { IconAlert } from './lib/icons';
 import type { ChartPoint, DashboardFilters, FilterOptions, PaginatedRecords, SearchResult, Summary, YearlyPoint } from './types';
 
 const emptyFilters: DashboardFilters = {};
@@ -106,8 +107,8 @@ function App() {
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm text-[#ff3b30] animate-slide-up" role="alert">
-              <span className="font-bold">•</span>
+            <div className="flex items-center gap-2.5 rounded-xl bg-red-50 px-4 py-3 text-sm text-[#ff3b30] animate-slide-up" role="alert">
+              <IconAlert size={16} className="shrink-0" strokeWidth={2} />
               {error}
             </div>
           )}

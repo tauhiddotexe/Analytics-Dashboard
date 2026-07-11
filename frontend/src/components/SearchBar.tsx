@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { fetchSearch } from '../api';
 import type { SearchResult } from '../types';
+import { IconSearch, IconDocument } from '../lib/icons';
 
 interface SearchBarProps {
   onSelect: (result: SearchResult) => void;
@@ -37,9 +38,7 @@ export function SearchBar({ onSelect }: SearchBarProps) {
   return (
     <div ref={ref} className="relative w-full sm:max-w-md">
       <div className="flex items-center rounded-[10px] border border-[#e5e5ea] bg-[#f5f5f7] px-3 py-2 text-sm transition-all focus-within:border-[#007aff] focus-within:shadow-[0_0_0_3px_rgba(0,122,255,0.15)]">
-        <svg className="mr-2 h-4 w-4 shrink-0 text-[#86868b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
-        </svg>
+        <IconSearch size={16} className="mr-2 shrink-0 text-[#86868b]" />
         <input
           className="w-full bg-transparent text-[#1d1d1f] placeholder-[#86868b] outline-none text-sm"
           type="search"
@@ -61,6 +60,7 @@ export function SearchBar({ onSelect }: SearchBarProps) {
                 aria-selected={false}
                 onClick={() => { onSelect(r); setOpen(false); setQuery(''); }}
               >
+                <IconDocument size={14} className="shrink-0 text-[#c7c7cc]" />
                 <span className="flex-1 truncate font-medium">{r.title}</span>
                 {r.sector && <span className="hidden shrink-0 text-[11px] text-[#86868b] sm:inline">{r.sector}</span>}
               </button>
