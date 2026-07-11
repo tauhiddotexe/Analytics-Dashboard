@@ -89,14 +89,14 @@ function App() {
   const totalPages = records ? Math.max(1, Math.ceil(records.total / records.limit)) : 1;
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9]">
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
-        <Header summary={summary} className="animate-fade-in-up">
+    <div className="min-h-screen bg-[#f5f5f7]">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-8 lg:px-10">
+        <Header summary={summary} className="animate-spring-in">
           <SearchBar onSelect={handleSearchSelect} />
         </Header>
 
-        <div className="mt-5 space-y-5">
-          <div className="animate-fade-in-up" style={{ animationDelay: '50ms' }}>
+        <div className="mt-6 space-y-6">
+          <div className="animate-slide-up" style={{ animationDelay: '60ms' }}>
             <FilterPanel
               filters={filters}
               filterOptions={filterOptions}
@@ -106,8 +106,8 @@ function App() {
           </div>
 
           {error && (
-            <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 animate-fade-in-up" role="alert">
-              <span className="text-red-500 font-bold">•</span>
+            <div className="flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm text-[#ff3b30] animate-slide-up" role="alert">
+              <span className="font-bold">•</span>
               {error}
             </div>
           )}
@@ -123,7 +123,7 @@ function App() {
                   { label: 'Average likelihood', value: summary?.average_likelihood ?? 0, decimals: 1 as const, color: 'var(--color-chart-2)' },
                   { label: 'Average relevance', value: summary?.average_relevance ?? 0, decimals: 1 as const, color: 'var(--color-chart-3)' },
                 ].map((kpi, i) => (
-                  <div key={kpi.label} className="animate-fade-in-up card-hover" style={{ animationDelay: `${100 + i * 80}ms` }}>
+                  <div key={kpi.label} className="animate-spring-in" style={{ animationDelay: `${100 + i * 80}ms` }}>
                     <KpiCard label={kpi.label} value={kpi.value} decimals={kpi.decimals} color={kpi.color} />
                   </div>
                 ))}
@@ -138,7 +138,7 @@ function App() {
                   { title: 'Country distribution', subtitle: 'Records by country (choropleth)', chart: <WorldMap data={countries} />, chartColor: 'var(--color-chart-5)' },
                   { title: 'Top topics', subtitle: 'Most frequent topics by record count', chart: <TopicsBarChart data={topics} />, chartColor: 'var(--color-chart-4)' },
                 ] as const).map((item, i) => (
-                  <div key={item.title} className="animate-fade-in-up card-hover" style={{ animationDelay: `${300 + i * 100}ms` }}>
+                  <div key={item.title} className="animate-spring-in" style={{ animationDelay: `${300 + i * 100}ms` }}>
                     <ChartShell title={item.title} subtitle={item.subtitle} chartColor={item.chartColor}>
                       {item.chart}
                     </ChartShell>
@@ -146,7 +146,7 @@ function App() {
                 ))}
               </section>
 
-              <div ref={recordsRef} className="animate-fade-in-up" style={{ animationDelay: '900ms' }}>
+              <div ref={recordsRef} className="animate-spring-in" style={{ animationDelay: '800ms' }}>
                 <RecordsTable
                   records={records}
                   page={page}

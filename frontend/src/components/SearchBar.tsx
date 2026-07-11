@@ -36,12 +36,12 @@ export function SearchBar({ onSelect }: SearchBarProps) {
 
   return (
     <div ref={ref} className="relative w-full sm:max-w-md">
-      <div className="flex items-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm transition-colors focus-within:border-[#1e40af] focus-within:ring-1 focus-within:ring-[#1e40af]/20">
-        <svg className="mr-2 h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
+      <div className="flex items-center rounded-[10px] border border-[#e5e5ea] bg-[#f5f5f7] px-3 py-2 text-sm transition-all focus-within:border-[#007aff] focus-within:shadow-[0_0_0_3px_rgba(0,122,255,0.15)]">
+        <svg className="mr-2 h-4 w-4 shrink-0 text-[#86868b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
         </svg>
         <input
-          className="w-full bg-transparent text-slate-700 placeholder-slate-400 outline-none text-sm"
+          className="w-full bg-transparent text-[#1d1d1f] placeholder-[#86868b] outline-none text-sm"
           type="search"
           placeholder="Search titles, insights..."
           aria-label="Search records"
@@ -49,20 +49,20 @@ export function SearchBar({ onSelect }: SearchBarProps) {
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => results.length > 0 && setOpen(true)}
         />
-        {loading && <span className="ml-2 h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-slate-300 border-t-slate-600" />}
+        {loading && <span className="ml-2 h-3 w-3 shrink-0 animate-spin rounded-full border-2 border-[#c7c7cc] border-t-[#007aff]" />}
       </div>
       {open && results.length > 0 && (
-        <ul className="absolute top-full z-50 mt-1 w-full overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg" role="listbox">
+        <ul className="absolute top-full z-50 mt-1.5 w-full overflow-hidden rounded-[12px] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] border border-[#e5e5ea]" role="listbox">
           {results.slice(0, 8).map((r) => (
             <li key={r.id}>
               <button
-                className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-slate-700 transition-colors hover:bg-slate-50"
+                className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-[#1d1d1f] transition-colors hover:bg-[#f5f5f7]"
                 role="option"
                 aria-selected={false}
                 onClick={() => { onSelect(r); setOpen(false); setQuery(''); }}
               >
                 <span className="flex-1 truncate font-medium">{r.title}</span>
-                {r.sector && <span className="hidden shrink-0 text-xs text-slate-400 sm:inline">{r.sector}</span>}
+                {r.sector && <span className="hidden shrink-0 text-[11px] text-[#86868b] sm:inline">{r.sector}</span>}
               </button>
             </li>
           ))}

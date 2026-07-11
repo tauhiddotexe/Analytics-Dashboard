@@ -6,17 +6,17 @@ interface IntensityBarChartProps {
   data: ChartPoint[];
 }
 
-const COLORS = ['#2563eb', '#059669', '#d97706', '#dc2626', '#7c3aed', '#0891b2', '#db2777', '#ea580c', '#0d9488', '#4f46e5', '#ca8a04', '#0284c7'];
+const COLORS = ['#007aff', '#34c759', '#ff9500', '#ff3b30', '#af52de', '#5ac8fa', '#ff2d55', '#ffcc00', '#34c759', '#5856d6', '#ff9500', '#5ac8fa'];
 
 function LollipopDot(props: { x?: number; y?: number; width?: number; height?: number; fill?: string; index?: number }) {
-  const { x = 0, y = 0, width = 0, height = 0, fill = '#2563eb' } = props;
+  const { x = 0, y = 0, width = 0, height = 0, fill = '#007aff' } = props;
   const cx = x + width / 2;
   const top = y;
   const bottom = y + height;
   return (
     <g>
-      <line x1={cx} y1={top} x2={cx} y2={bottom} stroke="#cbd5e1" strokeWidth={2} />
-      <circle cx={cx} cy={top} r={6} fill={fill} stroke="#fff" strokeWidth={2} />
+      <line x1={cx} y1={top} x2={cx} y2={bottom} stroke="#e5e5ea" strokeWidth={1.5} />
+      <circle cx={cx} cy={top} r={5} fill={fill} stroke="#fff" strokeWidth={2} />
     </g>
   );
 }
@@ -24,9 +24,9 @@ function LollipopDot(props: { x?: number; y?: number; width?: number; height?: n
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-md">
-      <p className="text-xs text-slate-500">{label}</p>
-      <p className="text-sm font-bold text-slate-800">{payload[0].value.toFixed(1)}</p>
+    <div className="rounded-[12px] bg-white px-3.5 py-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-[#e5e5ea]">
+      <p className="text-[11px] text-[#86868b]">{label}</p>
+      <p className="text-sm font-semibold text-[#1d1d1f]">{payload[0].value.toFixed(1)}</p>
     </div>
   );
 }
@@ -38,7 +38,7 @@ export function IntensityBarChart({ data }: IntensityBarChartProps) {
 
   if (chartData.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center text-xs text-slate-400">
+      <div className="flex h-full items-center justify-center text-xs text-[#86868b]">
         No data available
       </div>
     );
@@ -47,24 +47,24 @@ export function IntensityBarChart({ data }: IntensityBarChartProps) {
   return (
     <ResponsiveContainer>
       <BarChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 4 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f2" vertical={false} />
         <XAxis
           dataKey="label"
-          tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 500 }}
+          tick={{ fontSize: 10, fill: '#86868b', fontWeight: 500 }}
           tickLine={false}
-          axisLine={{ stroke: '#e2e8f0' }}
+          axisLine={{ stroke: '#e5e5ea' }}
           angle={-25}
           textAnchor="end"
           height={64}
           interval={0}
         />
         <YAxis
-          tick={{ fontSize: 11, fill: '#94a3b8' }}
+          tick={{ fontSize: 10, fill: '#86868b' }}
           tickLine={false}
           axisLine={false}
           domain={[0, 'auto']}
         />
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f1f5f9' }} />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f5f5f7' }} />
         <Bar dataKey="value" shape={<LollipopDot />} animationDuration={800}>
           {chartData.map((_, idx) => (
             <Cell key={idx} fill={COLORS[idx % COLORS.length]} />

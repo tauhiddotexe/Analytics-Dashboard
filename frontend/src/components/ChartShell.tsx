@@ -7,15 +7,14 @@ interface ChartShellProps {
   chartColor?: string;
 }
 
-export function ChartShell({ title, subtitle, children, chartColor = '#2563eb' }: ChartShellProps) {
+export function ChartShell({ title, subtitle, children }: ChartShellProps) {
   return (
-    <section className="rounded-lg border border-slate-200 bg-white shadow-sm overflow-hidden">
-      <div className="h-1" style={{ backgroundColor: chartColor }} />
-      <div className="px-3 pt-3 pb-1 sm:px-4 sm:pt-4 sm:pb-2">
-        <h3 className="text-xs font-semibold text-slate-800 sm:text-sm">{title}</h3>
-        {subtitle && <p className="mt-0.5 text-[10px] text-slate-400 sm:text-xs">{subtitle}</p>}
+    <section className="card-apple overflow-hidden">
+      <div className="px-4 pt-4 pb-2 sm:px-5 sm:pt-5 sm:pb-2">
+        <h3 className="text-sm font-semibold tracking-tight text-[#1d1d1f]">{title}</h3>
+        {subtitle && <p className="mt-0.5 text-[12px] text-[#86868b]">{subtitle}</p>}
       </div>
-      <div className="h-[220px] px-1 pb-1 sm:h-[280px] sm:px-2 sm:pb-2">{children}</div>
+      <div className="h-[220px] px-2 pb-2 sm:h-[300px] sm:px-3 sm:pb-3">{children}</div>
     </section>
   );
 }

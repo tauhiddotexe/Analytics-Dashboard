@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
+function appleSpring(t: number): number {
+  const c = 1 - t;
+  return 1 - c * c * c * c;
+}
+
 export function useAnimatedCounter(end: number, duration = 1200, enabled = true) {
   const [value, setValue] = useState(0);
   const frameRef = useRef<number>(0);
@@ -15,7 +20,7 @@ export function useAnimatedCounter(end: number, duration = 1200, enabled = true)
       if (!startTimeRef.current) startTimeRef.current = now;
       const elapsed = now - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - (1 - progress) * (1 - progress);
+      const eased = appleSpring(progress);
       setValue(Math.round(eased * end));
       if (progress < 1) {
         frameRef.current = requestAnimationFrame(tick);

@@ -13,23 +13,23 @@ const legendLabels: Record<string, string> = {
 };
 
 const CHART_COLORS = {
-  count: '#0891b2',
-  average_intensity: '#2563eb',
-  average_likelihood: '#059669',
-  average_relevance: '#d97706',
+  count: '#5ac8fa',
+  average_intensity: '#007aff',
+  average_likelihood: '#34c759',
+  average_relevance: '#ff9500',
 };
 
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { name: string; value: number }[]; label?: string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-md">
-      <p className="text-xs text-slate-500">Year: {label}</p>
+    <div className="rounded-[12px] bg-white px-3.5 py-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] border border-[#e5e5ea]">
+      <p className="text-[11px] text-[#86868b]">Year: {label}</p>
       <div className="mt-1.5 space-y-1">
         {payload.map((entry) => (
           <p key={entry.name} className="flex items-center gap-2 text-xs">
-            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS[entry.name as keyof typeof CHART_COLORS] ?? '#94a3b8' }} />
-            <span className="text-slate-600">{legendLabels[entry.name] ?? entry.name}:</span>
-            <span className="font-bold text-slate-800">{entry.value.toFixed(1)}</span>
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: CHART_COLORS[entry.name as keyof typeof CHART_COLORS] ?? '#c7c7cc' }} />
+            <span className="text-[#86868b]">{legendLabels[entry.name] ?? entry.name}:</span>
+            <span className="font-semibold text-[#1d1d1f]">{entry.value.toFixed(1)}</span>
           </p>
         ))}
       </div>
@@ -43,27 +43,27 @@ export function YearlyComposedChart({ data }: YearlyComposedChartProps) {
   return (
     <ResponsiveContainer>
       <ComposedChart data={data} margin={{ top: 4, right: 8, left: -16, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f2" vertical={false} />
         <XAxis
           dataKey="year"
-          tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 500 }}
+          tick={{ fontSize: 10, fill: '#86868b', fontWeight: 500 }}
           tickLine={false}
-          axisLine={{ stroke: '#e2e8f0' }}
+          axisLine={{ stroke: '#e5e5ea' }}
         />
         <YAxis
           yAxisId="left"
-          tick={{ fontSize: 11, fill: '#94a3b8' }}
+          tick={{ fontSize: 10, fill: '#86868b' }}
           tickLine={false}
           axisLine={false}
           domain={[0, 'auto']}
         />
         <YAxis yAxisId="right" orientation="right" hide domain={[0, 'auto']} />
         <Tooltip content={<CustomTooltip />} />
-        <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} formatter={legendFormatter} iconType="circle" iconSize={8} />
-        <Bar yAxisId="left" dataKey="count" fill={CHART_COLORS.count} radius={[4, 4, 0, 0]} maxBarSize={20} name="count" animationDuration={800} opacity={0.6} />
-        <Line yAxisId="right" type="monotone" dataKey="average_intensity" stroke={CHART_COLORS.average_intensity} strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: CHART_COLORS.average_intensity, strokeWidth: 3, stroke: '#fff' }} name="average_intensity" animationDuration={800} />
-        <Line yAxisId="right" type="monotone" dataKey="average_likelihood" stroke={CHART_COLORS.average_likelihood} strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: CHART_COLORS.average_likelihood, strokeWidth: 3, stroke: '#fff' }} name="average_likelihood" animationDuration={800} />
-        <Line yAxisId="right" type="monotone" dataKey="average_relevance" stroke={CHART_COLORS.average_relevance} strokeWidth={2.5} dot={false} activeDot={{ r: 5, fill: CHART_COLORS.average_relevance, strokeWidth: 3, stroke: '#fff' }} name="average_relevance" animationDuration={800} />
+        <Legend wrapperStyle={{ fontSize: 10, paddingTop: 8 }} formatter={legendFormatter} iconType="circle" iconSize={7} />
+        <Bar yAxisId="left" dataKey="count" fill={CHART_COLORS.count} radius={[4, 4, 0, 0]} maxBarSize={18} name="count" animationDuration={800} opacity={0.5} />
+        <Line yAxisId="right" type="monotone" dataKey="average_intensity" stroke={CHART_COLORS.average_intensity} strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: CHART_COLORS.average_intensity, strokeWidth: 2, stroke: '#fff' }} name="average_intensity" animationDuration={800} />
+        <Line yAxisId="right" type="monotone" dataKey="average_likelihood" stroke={CHART_COLORS.average_likelihood} strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: CHART_COLORS.average_likelihood, strokeWidth: 2, stroke: '#fff' }} name="average_likelihood" animationDuration={800} />
+        <Line yAxisId="right" type="monotone" dataKey="average_relevance" stroke={CHART_COLORS.average_relevance} strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: CHART_COLORS.average_relevance, strokeWidth: 2, stroke: '#fff' }} name="average_relevance" animationDuration={800} />
       </ComposedChart>
     </ResponsiveContainer>
   );

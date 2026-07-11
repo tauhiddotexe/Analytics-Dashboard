@@ -36,9 +36,9 @@ const ALIASES: Record<string, string> = {
   'republic of moldova': 'Moldova',
   'brunei': 'Brunei',
   'brunei darussalam': 'Brunei',
-  'ivory coast': "Côte d'Ivoire",
-  'côte d\'ivoire': "Côte d'Ivoire",
-  'cote d\'ivoire': "Côte d'Ivoire",
+  'ivory coast': "C\u00f4te d'Ivoire",
+  'c\u00f4te d\'ivoire': "C\u00f4te d'Ivoire",
+  'cote d\'ivoire': "C\u00f4te d'Ivoire",
   'macedonia': 'North Macedonia',
   'north macedonia': 'North Macedonia',
   'swaziland': 'Eswatini',
@@ -76,7 +76,7 @@ const ALIASES: Record<string, string> = {
   'st vincent and the grenadines': 'Saint Vincent and the Grenadines',
   'antigua and barbuda': 'Antigua and Barbuda',
   'trinidad and tobago': 'Trinidad and Tobago',
-  'são tomé and príncipe': 'Sao Tome and Principe',
+  's\u00e3o tom\u00e9 and pr\u00edncipe': 'Sao Tome and Principe',
   'sao tome and principe': 'Sao Tome and Principe',
 };
 
@@ -101,8 +101,8 @@ function buildGeoIndex(geoList: { properties: { name: string } }[]): Map<string,
   return index;
 }
 
-const COLORS = ['#e2e8f0', '#93c5fd', '#60a5fa', '#3b82f6', '#2563eb', '#1e40af'];
-const NO_DATA = '#e2e8f0';
+const COLORS = ['#f0f0f2', '#cce4ff', '#80c4ff', '#4da6ff', '#007aff', '#004c99'];
+const NO_DATA = '#f0f0f2';
 
 function buildValueMap(data: ChartPoint[]) {
   const map = new Map<string, number>();
@@ -188,7 +188,7 @@ function WorldMapInner({ data }: WorldMapProps) {
                   strokeWidth={0.5}
                   style={{
                     default: { outline: 'none' },
-                    hover: { fill: value > 0 ? '#1e40af' : '#cbd5e1', outline: 'none', cursor: value > 0 ? 'pointer' : 'default' },
+                    hover: { fill: value > 0 ? '#004c99' : '#c7c7cc', outline: 'none', cursor: value > 0 ? 'pointer' : 'default' },
                     pressed: { outline: 'none' },
                   }}
                   tabIndex={-1}
@@ -203,14 +203,14 @@ function WorldMapInner({ data }: WorldMapProps) {
         </Geographies>
       </ComposableMap>
 
-      <div className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-md bg-white/90 px-2.5 py-1.5 text-[10px] shadow-sm">
-        <span className="text-slate-500">Low</span>
+      <div className="absolute bottom-2 left-2 flex items-center gap-1.5 rounded-[8px] bg-white/80 px-2.5 py-1.5 text-[10px]">
+        <span className="text-[#86868b]">Low</span>
         <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: COLORS[1] }} />
         <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: COLORS[2] }} />
         <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: COLORS[3] }} />
         <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: COLORS[4] }} />
         <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: COLORS[5] }} />
-        <span className="text-slate-500">High</span>
+        <span className="text-[#86868b]">High</span>
       </div>
     </div>
   );
