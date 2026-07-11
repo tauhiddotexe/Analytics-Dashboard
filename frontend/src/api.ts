@@ -1,8 +1,16 @@
 import axios from 'axios';
 import type { ApiResponse, ChartPoint, DashboardFilters, FilterOptions, PaginatedRecords, SearchResult, Summary, YearlyPoint } from './types';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+if (!API_BASE_URL) {
+  throw new Error(
+    'VITE_API_URL is not defined. Set it in your .env file or environment.',
+  );
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1',
+  baseURL: API_BASE_URL,
   timeout: 15000,
 });
 
