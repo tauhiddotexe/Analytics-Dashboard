@@ -9,13 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@tailwindcss/vite": "latest",
+    "@types/react-simple-maps": "^3.0.6",
     "@vitejs/plugin-react": "latest",
     "axios": "latest",
+    "framer-motion": "^12.42.2",
+    "gsap": "^3.15.0",
     "react": "latest",
     "react-dom": "latest",
+    "react-simple-maps": "^3.0.0",
     "recharts": "latest",
-    "tailwindcss": "latest",
-    "@tailwindcss/vite": "latest"
+    "tailwindcss": "latest"
   },
   "devDependencies": {
     "@types/react": "latest",

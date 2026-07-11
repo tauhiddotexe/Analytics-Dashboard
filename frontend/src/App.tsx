@@ -11,15 +11,11 @@ import { IntensityBarChart } from './charts/IntensityBarChart';
 import { LikelihoodHorizontalChart } from './charts/LikelihoodHorizontalChart';
 import { RelevanceRadarChart } from './charts/RelevanceRadarChart';
 import { YearlyComposedChart } from './charts/YearlyComposedChart';
-import { CountryTreemap } from './charts/CountryTreemap';
+import { WorldMap } from './charts/WorldMap';
 import { TopicsBarChart } from './charts/TopicsBarChart';
 import type { ChartPoint, DashboardFilters, FilterOptions, PaginatedRecords, SearchResult, Summary, YearlyPoint } from './types';
 
 const emptyFilters: DashboardFilters = {};
-
-function formatNumber(value: number | null | undefined): string {
-  return value === null || value === undefined ? 'N/A' : value.toLocaleString();
-}
 
 function App() {
   const [filters, setFilters] = useState<DashboardFilters>(emptyFilters);
@@ -40,7 +36,7 @@ function App() {
   useEffect(() => {
     fetchFilters()
       .then(setFilterOptions)
-      .catch(() => setError('Unable to load filter options. Check the API server and database connection.'));
+      .catch(() => setError('Unable to load filter options.'));
   }, []);
 
   useEffect(() => {
@@ -69,7 +65,7 @@ function App() {
         setTopics(topicData);
       })
       .catch(() => {
-        if (active) setError('Dashboard data could not be loaded. Verify backend setup and Supabase credentials.');
+        if (active) setError('Dashboard data could not be loaded.');
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -93,27 +89,25 @@ function App() {
   const totalPages = records ? Math.max(1, Math.ceil(records.total / records.limit)) : 1;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-slate-50 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <Header>
-          <div className="mt-6">
-            <SearchBar onSelect={handleSearchSelect} />
-          </div>
+    <div className="min-h-screen bg-[#f1f5f9]">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+        <Header summary={summary} className="animate-fade-in-up">
+          <SearchBar onSelect={handleSearchSelect} />
         </Header>
 
-        <div className="mt-6 space-y-6">
-          <FilterPanel
-            filters={filters}
-            filterOptions={filterOptions}
-            onFilterChange={updateFilter}
-            onReset={() => { startTransition(() => { setPage(1); setFilters(emptyFilters); }); }}
-          />
+        <div className="mt-5 space-y-5">
+          <div className="animate-fade-in-up" style={{ animationDelay: '50ms' }}>
+            <FilterPanel
+              filters={filters}
+              filterOptions={filterOptions}
+              onFilterChange={updateFilter}
+              onReset={() => { startTransition(() => { setPage(1); setFilters(emptyFilters); }); }}
+            />
+          </div>
 
           {error && (
-            <div className="flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700" role="alert">
-              <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 animate-fade-in-up" role="alert">
+              <span className="text-red-500 font-bold">•</span>
               {error}
             </div>
           )}
@@ -123,34 +117,36 @@ function App() {
           ) : (
             <>
               <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <KpiCard label="Total records" value={formatNumber(summary?.total_records)} accent="bg-primary" />
-                <KpiCard label="Average intensity" value={formatNumber(summary?.average_intensity)} accent="bg-chart-2" />
-                <KpiCard label="Average likelihood" value={formatNumber(summary?.average_likelihood)} accent="bg-chart-3" />
-                <KpiCard label="Average relevance" value={formatNumber(summary?.average_relevance)} accent="bg-chart-4" />
+                {[
+                  { label: 'Total records', value: summary?.total_records ?? 0, color: 'var(--color-chart-1)' },
+                  { label: 'Average intensity', value: summary?.average_intensity ?? 0, decimals: 1 as const, color: 'var(--color-chart-1)' },
+                  { label: 'Average likelihood', value: summary?.average_likelihood ?? 0, decimals: 1 as const, color: 'var(--color-chart-2)' },
+                  { label: 'Average relevance', value: summary?.average_relevance ?? 0, decimals: 1 as const, color: 'var(--color-chart-3)' },
+                ].map((kpi, i) => (
+                  <div key={kpi.label} className="animate-fade-in-up card-hover" style={{ animationDelay: `${100 + i * 80}ms` }}>
+                    <KpiCard label={kpi.label} value={kpi.value} decimals={kpi.decimals} color={kpi.color} />
+                  </div>
+                ))}
               </section>
 
-              <section className="grid gap-6 xl:grid-cols-2">
-                <ChartShell title="Average intensity by country">
-                  <IntensityBarChart data={intensity} />
-                </ChartShell>
-                <ChartShell title="Likelihood by region">
-                  <LikelihoodHorizontalChart data={likelihood} />
-                </ChartShell>
-                <ChartShell title="Relevance by sector">
-                  <RelevanceRadarChart data={relevance} />
-                </ChartShell>
-                <ChartShell title="Yearly trends">
-                  <YearlyComposedChart data={yearly} />
-                </ChartShell>
-                <ChartShell title="Country distribution">
-                  <CountryTreemap data={countries} />
-                </ChartShell>
-                <ChartShell title="Top topics">
-                  <TopicsBarChart data={topics} />
-                </ChartShell>
+              <section className="grid gap-5 xl:grid-cols-2">
+                {([
+                  { title: 'Intensity by country', subtitle: 'Average intensity score per country', chart: <IntensityBarChart data={intensity} />, chartColor: 'var(--color-chart-1)' },
+                  { title: 'Likelihood by region', subtitle: 'Average likelihood score per region', chart: <LikelihoodHorizontalChart data={likelihood} />, chartColor: 'var(--color-chart-2)' },
+                  { title: 'Relevance by sector', subtitle: 'Average relevance score by sector', chart: <RelevanceRadarChart data={relevance} />, chartColor: 'var(--color-chart-3)' },
+                  { title: 'Yearly trends', subtitle: 'Record volume and metric averages over time', chart: <YearlyComposedChart data={yearly} />, chartColor: 'var(--color-chart-6)' },
+                  { title: 'Country distribution', subtitle: 'Records by country (choropleth)', chart: <WorldMap data={countries} />, chartColor: 'var(--color-chart-5)' },
+                  { title: 'Top topics', subtitle: 'Most frequent topics by record count', chart: <TopicsBarChart data={topics} />, chartColor: 'var(--color-chart-4)' },
+                ] as const).map((item, i) => (
+                  <div key={item.title} className="animate-fade-in-up card-hover" style={{ animationDelay: `${300 + i * 100}ms` }}>
+                    <ChartShell title={item.title} subtitle={item.subtitle} chartColor={item.chartColor}>
+                      {item.chart}
+                    </ChartShell>
+                  </div>
+                ))}
               </section>
 
-              <div ref={recordsRef}>
+              <div ref={recordsRef} className="animate-fade-in-up" style={{ animationDelay: '900ms' }}>
                 <RecordsTable
                   records={records}
                   page={page}
@@ -162,7 +158,7 @@ function App() {
           )}
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
